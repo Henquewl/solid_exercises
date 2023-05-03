@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Alura.LeilaoOnline.WebApp.Models;
 using Alura.LeilaoOnline.WebApp.Dados;
 
@@ -8,14 +7,12 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
     [ApiController]
     [Route("/api/leiloes")]
     public class LeilaoApiController : ControllerBase
-    {
-        AppDbContext _context;
-        LeilaoDao _dao;
+    {        
+        ILeilaoDao _dao;
 
-        public LeilaoApiController()
-        {
-            _context = new AppDbContext();
-            _dao = new LeilaoDao();
+        public LeilaoApiController(ILeilaoDao dao)
+        {            
+            _dao = dao;
         }
 
         [HttpGet]

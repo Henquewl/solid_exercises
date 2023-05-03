@@ -1,21 +1,18 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Alura.LeilaoOnline.WebApp.Dados;
 using Alura.LeilaoOnline.WebApp.Models;
-using System;
+using Alura.LeilaoOnline.WebApp.Dados;
 
 namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class LeilaoController : Controller
-    {
+    {        
+        ILeilaoDao _dao;
 
-        AppDbContext _context;
-        LeilaoDao _dao;
-
-        public LeilaoController()
-        {
-            _context = new AppDbContext();
-            _dao = new LeilaoDao();
+        public LeilaoController(ILeilaoDao dao)
+        {            
+            _dao = dao;
         }        
 
         public IActionResult Index()
