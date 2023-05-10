@@ -1,49 +1,36 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
 using Alura.LeilaoOnline.WebApp.Models;
-
-// System.Data - Ado.NET
-// System.Data.SqlClient - provider Sql Server
+using Microsoft.EntityFrameworkCore;
 
 namespace Alura.LeilaoOnline.WebApp.Dados.EfCore
 {
     public class LeilaoDaoComEfCore : ILeilaoDao
     {
-
         AppDbContext _context;
 
-        public LeilaoDaoComEfCore()
+        public LeilaoDaoComEfCore(AppDbContext context)
         {
-            _context = new AppDbContext();
+            _context = context;
         }
 
-        public IEnumerable<Categoria> BuscarCategorias()
+        public Leilao BuscarLeilaoPorId(int id)
         {
-            return _context.Categorias.ToList();
+            return _context.Leiloes.Find(id);
         }
 
-        public IEnumerable<Leilao> BuscarLeiloes()
-        {
-            return _context.Leiloes
-                .Include(l => l.Categoria)
-                .ToList();
-        }
+        public IEnumerable<Leilao> BuscarTodosLeiloes() => _context.Leiloes.Include(l => l.Categoria);
 
-        public Leilao BuscarLeilao(int leilao)
-        {
-            return _context.Leiloes.Find(leilao);
-        }
+        public IEnumerable<Categoria> BuscarTodasCategorias() => _context.Categorias;
 
-        public void Incluir(Leilao leilao)
+        public void Incluir(Leilao obj)
         {
-            _context.Leiloes.Add(leilao);
+            _context.Leiloes.Add(obj);
             _context.SaveChanges();
         }
 
-        public void Alterar(Leilao leilao)
+        public void Alterar(Leilao obj)
         {
-            _context.Leiloes.Update(leilao);
+            _context.Leiloes.Update(obj);
             _context.SaveChanges();
         }
 
@@ -51,11 +38,6 @@ namespace Alura.LeilaoOnline.WebApp.Dados.EfCore
         {
             _context.Leiloes.Remove(leilao);
             _context.SaveChanges();
-        }
-
-        public Leilao BuscaPorId(int id)
-        {
-            return _context.Leiloes.First(l => l.Id == id);
         }
     }
 }
